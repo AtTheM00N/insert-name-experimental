@@ -1,0 +1,92 @@
+.kinetic {
+  display: block;
+}
+
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.26em;
+  row-gap: 0.02em;
+}
+
+.word {
+  display: inline-flex;
+  white-space: pre;
+}
+
+.ch {
+  display: inline-block;
+  will-change: opacity, transform, filter;
+}
+
+/* ---- WIPE: letters step out of the dark ---- */
+
+.kinetic[data-mode="wipe"] .ch {
+  opacity: 0;
+  transform: translate3d(0, 0.42em, 0);
+  filter: blur(9px);
+  animation: expose 760ms var(--ease-out-expo) both;
+  animation-delay: var(--ch-delay, 0ms);
+}
+
+@keyframes expose {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.42em, 0);
+    filter: blur(9px);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+/* ---- FOCUS: the light picks letters out ----
+   --near is written by the rAF loop, 0..1. Everything below is derived
+   from it, so the JS only ever sets one number per character. */
+
+.kinetic[data-mode="focus"] .ch {
+  --near: 0;
+  color: color-mix(in oklab, var(--color-dim), var(--color-bone) calc(var(--near) * 100%));
+  transform: translate3d(0, calc(var(--near) * -0.055em), 0)
+    scale(calc(1 + var(--near) * 0.022));
+  filter: blur(calc((1 - var(--near)) * 2.1px));
+  transition:
+    color 340ms linear,
+    filter 340ms linear,
+    transform 420ms var(--ease-out-expo);
+}
+
+/* The emphasised word carries the studio's signal colour when lit. */
+.word[data-emphasis] .ch {
+  font-style: normal;
+}
+
+.kinetic[data-mode="focus"] .word[data-emphasis] .ch {
+  color: color-mix(in oklab, var(--color-dim), var(--color-signal) calc(var(--near) * 100%));
+}
+
+.kinetic[data-mode="wipe"] .word[data-emphasis] .ch {
+  color: var(--color-signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kinetic[data-mode="wipe"] .ch {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .kinetic[data-mode="focus"] .ch {
+    color: var(--color-bone);
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}

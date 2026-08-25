@@ -1,0 +1,339 @@
+/* ---- overlay ---- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 470;
+  display: grid;
+  place-items: center;
+  padding: var(--pad);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 2, 2, 0.9);
+  animation: fade 300ms ease both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.panel {
+  position: relative;
+  width: min(100%, 560px);
+  max-height: 88svh;
+  overflow-y: auto;
+  padding: clamp(22px, 3.4vw, 40px);
+  background: var(--color-ink);
+  border: 1px solid var(--color-line-strong);
+  display: grid;
+  gap: 14px;
+  animation: panelIn 560ms var(--ease-out-expo) both;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+/* One frame of white when the name lands — a shutter flash. */
+.panel[data-flash="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-bone);
+  animation: flash 420ms var(--ease-wipe) both;
+  pointer-events: none;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 12px;
+}
+
+.close {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color var(--d-fast) ease;
+}
+
+.close:hover,
+.close:focus-visible {
+  color: var(--color-bone);
+}
+
+.title {
+  font-size: clamp(1.7rem, 6vw, 2.9rem);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.titleAccent {
+  color: var(--color-signal);
+}
+
+.copy {
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--color-silver);
+  text-wrap: pretty;
+}
+
+.copyDim {
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+/* ---- form ---- */
+
+.form {
+  display: grid;
+  gap: 9px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 18px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--color-line-strong);
+  transition: border-color var(--d-fast) ease;
+}
+
+.inputRow:focus-within {
+  border-color: var(--color-signal);
+}
+
+.bracket {
+  font-family: var(--font-mark);
+  font-size: clamp(1.1rem, 3.4vw, 1.6rem);
+  color: var(--color-signal);
+  line-height: 1;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 0;
+  background: transparent;
+  color: var(--color-bone);
+  font-family: var(--font-mark);
+  font-size: clamp(1.1rem, 3.4vw, 1.6rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.input::placeholder {
+  color: var(--color-ghost);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.help {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--color-dim);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.commit {
+  padding: 13px 20px;
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  transition:
+    background-color var(--d-fast) ease,
+    opacity var(--d-fast) ease;
+}
+
+.commit:hover:not(:disabled),
+.commit:focus-visible:not(:disabled) {
+  background: var(--color-signal);
+}
+
+.commit:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.revert {
+  padding: 13px 16px;
+  border: 1px solid var(--color-line-strong);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition:
+    color var(--d-fast) ease,
+    border-color var(--d-fast) ease;
+}
+
+.revert:hover,
+.revert:focus-visible {
+  color: var(--color-bone);
+  border-color: var(--color-silver);
+}
+
+.flash {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-signal);
+}
+
+/* ---- hint ---- */
+
+.hint {
+  position: fixed;
+  left: var(--pad);
+  bottom: calc(var(--bar) + 16px);
+  z-index: 140;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(94vw, 380px);
+  padding: 11px 13px;
+  background: var(--color-ink);
+  border: 1px solid var(--color-line-strong);
+  animation: hintIn 700ms var(--ease-out-expo) both;
+}
+
+@keyframes hintIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hintDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  flex: 0 0 auto;
+  animation: rec 2.4s steps(1) infinite;
+}
+
+.hintCopy {
+  flex: 1 1 auto;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.hintLink {
+  color: var(--color-bone);
+  border-bottom: 1px solid var(--color-line-strong);
+  transition: border-color var(--d-fast) ease;
+  white-space: nowrap;
+}
+
+.hintLink:hover,
+.hintLink:focus-visible {
+  border-color: var(--color-signal);
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 1px 5px;
+  border: 1px solid var(--color-line-strong);
+  color: var(--color-bone);
+}
+
+.hintClose {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: var(--color-dim);
+  font-size: 15px;
+  line-height: 1;
+  transition: color var(--d-fast) ease;
+}
+
+.hintClose:hover,
+.hintClose:focus-visible {
+  color: var(--color-bone);
+}
+
+@media (max-width: 720px) {
+  .hint {
+    bottom: calc(var(--bar) + 52px);
+    left: var(--pad);
+    right: var(--pad);
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .scrim,
+  .hint {
+    animation: none;
+  }
+
+  .hintDot {
+    animation: none;
+  }
+}

@@ -1,0 +1,232 @@
+.dark {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(24px, 4vh, 48px);
+  padding-top: calc(var(--bar) + clamp(18px, 5vh, 48px));
+  padding-bottom: calc(var(--bar) + clamp(48px, 8vh, 64px));
+  isolation: isolate;
+  overflow: hidden;
+  /* The room has depth. Only this shot declares it, so the rest of the film
+     is not paying for a 3D rendering context it never uses. */
+  perspective: 1100px;
+  perspective-origin: 50% 42%;
+}
+
+/* ---- aperture ring: sits on the light, marks it as a lens ---- */
+
+/* Outer: the handoff to the gate. Scroll-driven, so deliberately not
+   transitioned — the scroll position *is* the timeline. */
+.aperture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 46vmin;
+  height: 46vmin;
+  margin: -23vmin 0 0 -23vmin;
+  translate: var(--px) var(--py);
+  pointer-events: none;
+  z-index: -1;
+  opacity: calc(1 - var(--gate, 0));
+}
+
+/* Inner: the slow fade for a pointer arriving in the room. */
+.apertureRing {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(244, 242, 237, 0.055);
+  border-radius: 50%;
+  opacity: calc(0.25 + var(--pointer-in) * 0.55);
+  transition: opacity 600ms linear;
+}
+
+.apertureRing::after {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border: 1px solid rgba(100, 175, 219, 0.09);
+  border-radius: 50%;
+}
+
+/* ---- head ---- */
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  opacity: 0;
+  animation: fade 900ms var(--ease-out-expo) 400ms both;
+  /* The three bands of the shot sit at three distances, so leaving the room
+     separates them instead of sliding one flat plane away. */
+  transform: translate3d(0, 0, calc(var(--gate, 0) * -120px));
+}
+
+.cue {
+  color: var(--color-signal);
+  transition: opacity var(--d-slow) linear;
+}
+
+.cue[data-engaged="true"] {
+  opacity: 0;
+}
+
+@keyframes fade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- title ---- */
+
+.title {
+  align-self: center;
+  font-size: var(--fs-mega);
+  line-height: 0.87;
+  letter-spacing: -0.045em;
+  max-width: 17ch;
+  /* The headline does not fade out where it stands — it travels away from
+     the lens. `perspective` on the section turns 420px of Z into real
+     recession, and it is still one composited layer moving on the GPU. */
+  transform: translate3d(0, 0, calc(var(--gate, 0) * -420px));
+  opacity: calc(1 - var(--gate, 0) * 0.86);
+}
+
+.l1 {
+  color: var(--color-bone);
+}
+
+.l2 {
+  color: var(--color-bone);
+  padding-left: 0.09em;
+}
+
+/* The third line is the answer, so it is set in the accent and indented
+   like a reply. */
+.l3 {
+  margin-top: clamp(6px, 1.4vh, 18px);
+  font-size: clamp(1.15rem, 3.4vw, 2.55rem);
+  letter-spacing: -0.02em;
+  color: var(--color-silver);
+  padding-left: 0.12em;
+}
+
+/* ---- foot ---- */
+
+.foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(20px, 4vw, 64px);
+  opacity: 0;
+  animation: fade 1100ms var(--ease-out-expo) 1500ms both;
+  /* Nearest the lens, so it is the last thing to leave. */
+  transform: translate3d(0, 0, calc(var(--gate, 0) * -46px));
+}
+
+.thesis {
+  font-size: var(--fs-md);
+  line-height: 1.45;
+  color: var(--color-bone);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+.thesisDim {
+  display: inline-block;
+  margin-top: 0.7em;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.next {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 2px;
+  color: var(--color-silver);
+  transition: color var(--d-fast) ease;
+  white-space: nowrap;
+}
+
+.next:hover,
+.next:focus-visible {
+  color: var(--color-bone);
+}
+
+.nextRule {
+  width: clamp(28px, 6vw, 70px);
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  transition: transform var(--d-mid) var(--ease-out-expo);
+}
+
+.next:hover .nextRule,
+.next:focus-visible .nextRule {
+  transform: scaleX(1.3);
+}
+
+.nextArrow {
+  font-family: var(--font-mono);
+  animation: nudge 2.4s var(--ease-in-out-quart) infinite;
+}
+
+@keyframes nudge {
+  0%,
+  70%,
+  100% {
+    transform: translateY(0);
+  }
+  82% {
+    transform: translateY(4px);
+  }
+}
+
+@media (max-width: 720px) {
+  .foot {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 22px;
+  }
+
+  .title {
+    max-width: none;
+  }
+
+  .aperture {
+    width: 68vmin;
+    height: 68vmin;
+    margin: -34vmin 0 0 -34vmin;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head,
+  .foot {
+    animation: none;
+    opacity: 1;
+  }
+
+  /* No camera move, so nothing recedes — the room is simply lit and still. */
+  .dark {
+    perspective: none;
+  }
+
+  .head,
+  .title,
+  .foot {
+    transform: none;
+    opacity: 1;
+  }
+
+  .nextArrow {
+    animation: none;
+  }
+
+  .aperture {
+    display: none;
+  }
+}

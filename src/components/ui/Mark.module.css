@@ -1,0 +1,107 @@
+.mark {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mark);
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--color-bone);
+  white-space: nowrap;
+}
+
+.mark[data-compact] {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.bracket {
+  color: var(--color-signal);
+}
+
+.word {
+  color: inherit;
+}
+
+/* The underscore: the only character that moves, and the way in. */
+.blank {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1ch;
+  padding: 0 0.04em;
+  color: var(--color-signal);
+  font: inherit;
+  animation: pulse 3.4s var(--ease-in-out-quart) infinite;
+  transition: color var(--d-fast) ease;
+}
+
+@keyframes pulse {
+  0%,
+  74%,
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  84% {
+    opacity: 0.35;
+    transform: translateY(-1px);
+  }
+}
+
+/* The glyph is 16px of type. The target it answers to is not — an invisible
+   pad extends the hit area to 32 × 44 without moving a pixel of the mark.
+   It reaches over the neighbouring letters, which are plain text, so the
+   only cost is that two glyphs stop being selectable. Worth it: on a phone
+   there is no hover to find this with, only a thumb. */
+.blank::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 32px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+.blank::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  transform: translateX(-50%) scale(0);
+  transition: transform var(--d-fast) var(--ease-out-expo);
+}
+
+.blank:hover,
+.blank:focus-visible {
+  color: var(--color-bone);
+  animation-play-state: paused;
+}
+
+.blank:hover::after,
+.blank:focus-visible::after {
+  transform: translateX(-50%) scale(1);
+}
+
+.named {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  transition: color var(--d-fast) ease;
+}
+
+.named:hover,
+.named:focus-visible {
+  color: var(--color-signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blank {
+    animation: none;
+  }
+}

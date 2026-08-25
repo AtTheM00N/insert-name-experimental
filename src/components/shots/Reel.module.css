@@ -1,0 +1,573 @@
+.wrap {
+  padding-block: var(--shot-gap);
+  display: grid;
+  gap: clamp(26px, 4.5vh, 48px);
+}
+
+/* ---- head ---- */
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 80px);
+  align-items: end;
+}
+
+.title {
+  margin-top: 14px;
+  font-size: var(--fs-xl);
+  letter-spacing: -0.04em;
+}
+
+.titleDim {
+  color: var(--color-dim);
+}
+
+.headSide {
+  display: grid;
+  gap: 22px;
+}
+
+.note {
+  font-size: var(--fs-body);
+  color: var(--color-silver);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+.proof {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.proofRow {
+  display: grid;
+  grid-template-columns: 15ch minmax(0, 1fr);
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.proofRow dt {
+  color: var(--color-dim);
+}
+
+.proofRow dd {
+  color: var(--color-bone);
+}
+
+/* ---- sprocket strip ---- */
+
+.sprocket {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 12px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 10px;
+}
+
+.sprocketRun {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background: var(--color-signal);
+  transform-origin: left;
+  transition: transform 100ms linear;
+}
+
+.hole {
+  width: 16px;
+  height: 8px;
+  border: 1px solid var(--color-line-strong);
+  transition:
+    background-color var(--d-fast) ease,
+    border-color var(--d-fast) ease;
+}
+
+.hole[data-on="true"] {
+  background: var(--color-bone);
+  border-color: var(--color-bone);
+}
+
+/* ---- the strip ---- */
+
+.track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ghost) transparent;
+  padding-bottom: 14px;
+  /* Bleed the strip to both page edges so it reads as continuous film. */
+  margin-inline: calc(var(--pad) * -1);
+  padding-inline: var(--pad);
+  overscroll-behavior-x: contain;
+}
+
+.track::-webkit-scrollbar {
+  height: 3px;
+}
+
+.track::-webkit-scrollbar-thumb {
+  background: var(--color-ghost);
+}
+
+.track:focus-visible {
+  outline: 1px solid var(--color-signal);
+  outline-offset: 6px;
+}
+
+/* ---- cell ---- */
+
+.cell {
+  flex: 0 0 auto;
+  width: clamp(280px, 46vw, 640px);
+  scroll-snap-align: center;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 12px;
+  opacity: 0.55;
+  transition: opacity var(--d-mid) ease;
+}
+
+.cell[data-active="true"] {
+  opacity: 1;
+}
+
+.cell[data-ratio="4:5"],
+.cell[data-ratio="1:1"] {
+  width: clamp(240px, 30vw, 400px);
+}
+
+.cellTop {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 8px;
+}
+
+.cellNo {
+  color: var(--color-signal);
+}
+
+.cellCat {
+  color: var(--color-silver);
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cellStatus {
+  color: var(--color-dim);
+}
+
+.cellStatus[data-status="developing"] {
+  color: var(--color-bone);
+}
+
+/* ---- plate ---- */
+
+.cellPlate {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-ink-deep);
+  border: 1px solid var(--color-line);
+  padding: 0;
+}
+
+.cell[data-ratio="21:9"] .cellPlate {
+  aspect-ratio: 21 / 9;
+}
+.cell[data-ratio="4:5"] .cellPlate {
+  aspect-ratio: 4 / 5;
+}
+.cell[data-ratio="1:1"] .cellPlate {
+  aspect-ratio: 1 / 1;
+}
+
+.plate {
+  position: absolute;
+  inset: 0;
+}
+
+.plate :global(.plate-canvas) {
+  width: 100%;
+  height: 100%;
+  transition:
+    opacity var(--d-mid) ease,
+    transform var(--d-slow) var(--ease-out-expo);
+  opacity: 0.72;
+}
+
+.cellPlate:hover :global(.plate-canvas),
+.cellPlate:focus-visible :global(.plate-canvas) {
+  opacity: 1;
+  transform: scale(1.035);
+}
+
+/* Perforations along the top and bottom of every frame. */
+.perfs {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 9px;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(5, 5, 5, 0.9) 0 9px,
+    transparent 9px 22px
+  );
+}
+
+.perfs[data-edge="top"] {
+  top: 0;
+}
+
+.perfs[data-edge="bottom"] {
+  bottom: 0;
+}
+
+/* Hover reveal: a bar wipes up from the bottom of the plate. */
+.cellReveal {
+  position: absolute;
+  inset: auto 0 0 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cellRevealInner {
+  display: block;
+  padding: 11px 14px;
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: translateY(101%);
+  transition: transform var(--d-mid) var(--ease-out-expo);
+}
+
+.cellPlate:hover .cellRevealInner,
+.cellPlate:focus-visible .cellRevealInner {
+  transform: translateY(0);
+}
+
+/* ---- cell foot ---- */
+
+.cellFoot {
+  display: grid;
+  gap: 7px;
+}
+
+.cellTitle {
+  font-size: clamp(1rem, 1.5vw, 1.28rem);
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: var(--color-bone);
+}
+
+.cellBrief {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--color-muted);
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+
+/* ---- tail card ---- */
+
+.tail {
+  flex: 0 0 auto;
+  width: clamp(260px, 30vw, 400px);
+  scroll-snap-align: center;
+  display: grid;
+  align-items: center;
+}
+
+.tailInner {
+  display: grid;
+  gap: 14px;
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--color-line);
+  border-style: dashed;
+}
+
+.tailCopy {
+  font-size: var(--fs-body);
+  color: var(--color-silver);
+  text-wrap: pretty;
+}
+
+.tailLink {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--color-line-strong);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+  transition: border-color var(--d-fast) ease;
+}
+
+.tailLink:hover,
+.tailLink:focus-visible {
+  border-color: var(--color-signal);
+}
+
+/* ---- controls ---- */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 14px;
+}
+
+.counter {
+  color: var(--color-bone);
+}
+
+.hint {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.arrow {
+  width: 40px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-line);
+  color: var(--color-silver);
+  font-family: var(--font-mono);
+  transition:
+    border-color var(--d-fast) ease,
+    color var(--d-fast) ease,
+    background-color var(--d-fast) ease;
+}
+
+.arrow:hover,
+.arrow:focus-visible {
+  border-color: var(--color-bone);
+  color: var(--color-ink);
+  background: var(--color-bone);
+}
+
+/* ---- case sheet ---- */
+
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 460;
+  display: grid;
+  place-items: end center;
+}
+
+.sheetScrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 3, 3, 0.82);
+  backdrop-filter: blur(3px);
+  animation: scrimIn 320ms ease both;
+}
+
+@keyframes scrimIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sheetBody {
+  position: relative;
+  width: min(100%, 720px);
+  max-height: min(86svh, 760px);
+  overflow-y: auto;
+  margin-bottom: calc(var(--bar) + 8px);
+  padding: clamp(20px, 3.4vw, 40px);
+  background: var(--color-ink);
+  border: 1px solid var(--color-line-strong);
+  display: grid;
+  gap: 16px;
+  animation: sheetIn 480ms var(--ease-out-expo) both;
+}
+
+@keyframes sheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sheetHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 12px;
+}
+
+.sheetClose {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color var(--d-fast) ease;
+}
+
+.sheetClose:hover,
+.sheetClose:focus-visible {
+  color: var(--color-bone);
+}
+
+.sheetTitle {
+  font-size: clamp(1.35rem, 3.4vw, 2.1rem);
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+
+.sheetBrief {
+  font-size: var(--fs-md);
+  color: var(--color-silver);
+  text-wrap: pretty;
+}
+
+.sheetHonest {
+  padding: 14px 16px;
+  border-left: 1px solid var(--color-signal);
+  background: rgba(100, 175, 219, 0.045);
+  font-size: var(--fs-sm);
+  color: var(--color-silver);
+}
+
+.process {
+  display: grid;
+  border-top: 1px solid var(--color-line);
+}
+
+.processRow {
+  display: grid;
+  grid-template-columns: 3ch 15ch minmax(0, 1fr);
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--color-line);
+  font-size: var(--fs-sm);
+}
+
+.processNo {
+  font-family: var(--font-mono);
+  color: var(--color-signal);
+}
+
+.processKey {
+  font-family: var(--font-mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+}
+
+.processVal {
+  color: var(--color-muted);
+}
+
+.sheetCta {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background-color var(--d-fast) ease;
+}
+
+.sheetCta:hover,
+.sheetCta:focus-visible {
+  background: var(--color-signal);
+}
+
+/* ---- narrow ---- */
+
+@media (max-width: 860px) {
+  .head {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .cell,
+  .cell[data-ratio="4:5"],
+  .cell[data-ratio="1:1"] {
+    width: min(82vw, 420px);
+  }
+
+  .tail {
+    width: min(82vw, 420px);
+  }
+
+  .proofRow {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .processRow {
+    grid-template-columns: 3ch minmax(0, 1fr);
+  }
+
+  .processVal {
+    grid-column: 2;
+  }
+
+  .hint {
+    display: none;
+  }
+}

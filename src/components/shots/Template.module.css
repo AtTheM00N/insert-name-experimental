@@ -1,0 +1,305 @@
+.wrap {
+  padding-block: var(--shot-gap);
+  display: grid;
+  gap: clamp(28px, 5vh, 56px);
+}
+
+/* ---- head ---- */
+
+.head {
+  display: grid;
+  gap: 16px;
+  max-width: 62rem;
+}
+
+.title {
+  font-size: var(--fs-xl);
+  letter-spacing: -0.04em;
+}
+
+.titleDim {
+  color: var(--color-dim);
+}
+
+/* ---- frame ---- */
+
+.frame {
+  --seam: 38%;
+  position: relative;
+  aspect-ratio: 21 / 9;
+  min-height: 300px;
+  max-height: 76svh;
+  overflow: hidden;
+  background: var(--color-ink-deep);
+  border: 1px solid var(--color-line);
+  touch-action: pan-y;
+  isolation: isolate;
+}
+
+.side {
+  position: absolute;
+  inset: 0;
+}
+
+/* Clip each side against the seam. clip-path on a fixed-size box is
+   compositor-friendly — no layout, no paint of the hidden half. */
+.side[data-side="left"] {
+  clip-path: inset(0 calc(100% - var(--seam)) 0 0);
+  z-index: 2;
+}
+
+.side[data-side="right"] {
+  clip-path: inset(0 0 0 var(--seam));
+  z-index: 1;
+}
+
+.sideInner {
+  position: absolute;
+  inset: 0;
+}
+
+/* The template side is deliberately flat, grey, lifeless. */
+.side[data-side="left"] .sideInner {
+  background: #101012;
+}
+
+.side[data-side="right"] .sideInner {
+  background: var(--color-ink-deep);
+}
+
+.plate {
+  position: absolute;
+  inset: 0;
+}
+
+.plate canvas,
+.plate :global(.plate-canvas) {
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+}
+
+/* ---- wireframe ---- */
+
+.wire {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.wireFill {
+  fill: #1b1b1e;
+}
+
+.wireInk {
+  fill: #3a3a3e;
+}
+
+.wireBox {
+  fill: #17171a;
+  stroke: #2e2e33;
+  stroke-width: 1;
+}
+
+.wireImg {
+  fill: #26262b;
+}
+
+.wireBtn {
+  fill: #4a4a50;
+}
+
+/* ---- overlays ---- */
+
+.overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: clamp(16px, 2.6vw, 34px);
+  display: grid;
+  gap: 10px;
+  align-content: end;
+  background: linear-gradient(to top, rgba(5, 5, 5, 0.94) 8%, rgba(5, 5, 5, 0) 78%);
+  max-width: 40ch;
+}
+
+.overlay[data-side="right"] {
+  margin-left: auto;
+  text-align: right;
+  justify-items: end;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.tag[data-side="right"] {
+  color: var(--color-signal);
+}
+
+.sideHead {
+  font-size: clamp(1.05rem, 2.3vw, 1.7rem);
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  color: var(--color-bone);
+  text-transform: none;
+}
+
+.side[data-side="left"] .sideHead {
+  color: var(--color-muted);
+}
+
+.list {
+  display: grid;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-alert);
+  text-decoration-thickness: 1px;
+  color: var(--color-dim);
+}
+
+/* ---- seam ---- */
+
+.seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--seam);
+  z-index: 4;
+  width: 0;
+  pointer-events: none;
+}
+
+.seamLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 1px;
+  background: var(--color-bone);
+  box-shadow: 0 0 22px rgba(244, 242, 237, 0.4);
+}
+
+.seamGrip {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 9px;
+  background: var(--color-ink);
+  border: 1px solid var(--color-bone);
+  color: var(--color-bone);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.seamArrow {
+  font-family: var(--font-mono);
+}
+
+/* ---- keyboard control: real range input, visually reduced to the seam ---- */
+
+.control {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 5;
+  display: block;
+  padding: 0 clamp(16px, 2.6vw, 34px) clamp(12px, 2vh, 18px);
+}
+
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 26px;
+  background: transparent;
+  cursor: ew-resize;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--color-line-strong);
+}
+
+.range::-moz-range-track {
+  height: 1px;
+  background: var(--color-line-strong);
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 12px;
+  margin-top: -6px;
+  background: var(--color-bone);
+  border: 0;
+}
+
+.range::-moz-range-thumb {
+  width: 26px;
+  height: 12px;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-bone);
+}
+
+.range:focus-visible {
+  outline: 1px solid var(--color-signal);
+  outline-offset: 4px;
+}
+
+/* ---- aside ---- */
+
+.aside {
+  font-size: var(--fs-body);
+  color: var(--color-silver);
+  max-width: 68ch;
+}
+
+.asideDim {
+  color: var(--color-dim);
+}
+
+/* ---- narrow ---- */
+
+@media (max-width: 860px) {
+  .frame {
+    aspect-ratio: 4 / 5;
+    max-height: none;
+  }
+
+  .overlay {
+    max-width: none;
+    padding-bottom: 52px;
+  }
+
+  .overlay[data-side="right"] {
+    text-align: left;
+    justify-items: start;
+  }
+
+  .list {
+    font-size: 12px;
+  }
+
+  .side[data-side="left"] .sideInner .wire {
+    opacity: 0.34;
+  }
+}

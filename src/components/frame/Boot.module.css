@@ -1,0 +1,156 @@
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+}
+
+.half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.05%;
+  overflow: hidden;
+  background: var(--color-ink);
+  display: flex;
+  justify-content: center;
+  transform: translateY(0);
+  transition: transform 880ms var(--ease-wipe);
+  will-change: transform;
+}
+
+.half[data-half="top"] {
+  top: 0;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.half[data-half="bottom"] {
+  bottom: 0;
+  align-items: flex-start;
+}
+
+/* The shutter opens on the film. */
+.boot[data-phase="open"] .half[data-half="top"] {
+  transform: translateY(-100%);
+}
+
+.boot[data-phase="open"] .half[data-half="bottom"] {
+  transform: translateY(100%);
+}
+
+.inner {
+  padding-block: clamp(20px, 5.5vh, 52px);
+  padding-inline: var(--pad);
+  display: flex;
+  justify-content: center;
+}
+
+/* ---- countdown ---- */
+
+.leader {
+  position: relative;
+  width: clamp(120px, 22vh, 190px);
+  height: clamp(120px, 22vh, 190px);
+  display: grid;
+  place-items: center;
+}
+
+.crosshair {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--color-line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.crosshair circle,
+.crosshair line {
+  fill: none;
+}
+
+.sweep {
+  stroke: var(--color-signal);
+  stroke-width: 2;
+  transform-origin: 100px 100px;
+  animation: sweep 260ms linear infinite;
+}
+
+@keyframes sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.count {
+  position: relative;
+  font-family: var(--font-mark);
+  font-size: clamp(2.5rem, 7vh, 4.25rem);
+  line-height: 1;
+  color: var(--color-bone);
+  animation: cut 260ms steps(2) 1;
+}
+
+@keyframes cut {
+  0% {
+    opacity: 0.2;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---- status block ---- */
+
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.mark {
+  font-family: var(--font-mark);
+  font-size: clamp(0.9rem, 2.4vw, 1.2rem);
+  letter-spacing: 0.14em;
+  color: var(--color-bone);
+}
+
+.bracket {
+  color: var(--color-signal);
+}
+
+.cue {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+  min-height: 1.2em;
+}
+
+.skip {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweep,
+  .count {
+    animation: none;
+  }
+  .half {
+    transition: none;
+  }
+}

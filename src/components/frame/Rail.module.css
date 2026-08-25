@@ -1,0 +1,231 @@
+.rail {
+  --run: 0;
+  position: fixed;
+  z-index: 130;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--rail);
+  padding-block: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* The strip: a hairline with a lit portion showing how far the reel has run. */
+.strip {
+  position: absolute;
+  right: calc(var(--rail) / 2);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-line);
+  overflow: hidden;
+}
+
+.run {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100%;
+  background: var(--color-silver);
+  transform-origin: top;
+  transform: scaleY(var(--run));
+  transition: transform 90ms linear;
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.item {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+  padding: 7px 0;
+  padding-right: calc(var(--rail) / 2 - 6px);
+  color: var(--color-dim);
+  transition: color var(--d-fast) ease;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-bone);
+}
+
+.link[data-current="true"] {
+  color: var(--color-bone);
+}
+
+.tick {
+  width: 12px;
+  height: 1px;
+  background: currentColor;
+  flex: 0 0 auto;
+  transition:
+    width var(--d-mid) var(--ease-out-expo),
+    background-color var(--d-fast) ease;
+}
+
+.link[data-current="true"] .tick {
+  width: 22px;
+  background: var(--color-signal);
+}
+
+.link:hover .tick,
+.link:focus-visible .tick {
+  width: 22px;
+}
+
+/* Names stay out of the way until the visitor reaches for them. */
+.meta {
+  position: absolute;
+  right: calc(var(--rail) / 2 + 18px);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(8px);
+  pointer-events: none;
+  transition:
+    opacity var(--d-mid) var(--ease-out-expo),
+    transform var(--d-mid) var(--ease-out-expo);
+}
+
+.rail[data-open="true"] .meta,
+.link:focus-visible .meta {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.no {
+  color: var(--color-signal);
+}
+
+.label {
+  color: inherit;
+}
+
+.mark {
+  color: var(--color-dim);
+  font-size: 11px;
+}
+
+/* ---- Small screens: the rail lies down and becomes a scrubber ----
+   Six ticks across the bottom, welded to the letterbox bar and carrying the
+   same ink, so the 46px of tap area reads as chrome instead of an invisible
+   band that swallows taps aimed at the film. The hairline dividing it from
+   the film is itself the progress bar. */
+@media (max-width: 720px) {
+  .rail {
+    top: auto;
+    bottom: var(--bar);
+    left: 0;
+    right: 0;
+    width: auto;
+    height: var(--scrub);
+    transform: none;
+    padding: 0 var(--pad);
+    align-items: stretch;
+    justify-content: stretch;
+    background: var(--color-ink);
+  }
+
+  .strip {
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+  }
+
+  .run {
+    inset: 0 auto 0 0;
+    width: 100%;
+    height: 1px;
+    transform-origin: left;
+    transform: scaleX(var(--run));
+  }
+
+  .list {
+    position: static;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .item {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* Full height of the scrubber, and a sixth of its width: ~56 × 46 at 375px,
+     which is a target a thumb can actually find. `position: static` matters —
+     it hands the shot name below back to .rail as its containing block, so
+     the name centres across the whole strip instead of inside one 47px cell. */
+  .link {
+    position: static;
+    width: 100%;
+    height: 100%;
+    padding: 0 3px 12px;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .tick {
+    width: 100%;
+    min-width: 0;
+    height: 2px;
+  }
+
+  .link[data-current="true"] .tick,
+  .link:hover .tick,
+  .link:focus-visible .tick {
+    width: 100%;
+  }
+
+  /* One name at a time, centred across the whole scrubber — the shot titles
+     are far too long to sit inside a 56px column. */
+  .meta {
+    position: absolute;
+    top: 9px;
+    left: var(--pad);
+    right: var(--pad);
+    bottom: auto;
+    justify-content: center;
+    transform: none;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    opacity: 0;
+    transition: opacity var(--d-mid) var(--ease-out-expo);
+  }
+
+  .link[data-current="true"] .meta,
+  .link:focus-visible .meta {
+    opacity: 1;
+    transform: none;
+  }
+
+  .meta .mark {
+    display: none;
+  }
+}

@@ -1,0 +1,455 @@
+.wrap {
+  padding-block: var(--shot-gap);
+  display: grid;
+  gap: clamp(26px, 4.5vh, 48px);
+}
+
+/* ---- head ---- */
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 80px);
+  align-items: end;
+}
+
+.title {
+  margin-top: 14px;
+  font-size: var(--fs-xl);
+  letter-spacing: -0.04em;
+}
+
+.titleDim {
+  color: var(--color-dim);
+}
+
+.headSide {
+  display: grid;
+  gap: 20px;
+}
+
+.note {
+  font-size: var(--fs-body);
+  color: var(--color-silver);
+  max-width: 54ch;
+  text-wrap: pretty;
+}
+
+/* ---- toggle ---- */
+
+.toggleRow {
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 16px;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: start;
+  color: var(--color-muted);
+  transition: color var(--d-fast) ease;
+}
+
+.toggle[data-on="true"] {
+  color: var(--color-bone);
+}
+
+.toggleTrack {
+  position: relative;
+  width: 46px;
+  height: 20px;
+  border: 1px solid var(--color-line-strong);
+  flex: 0 0 auto;
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 14px;
+  background: var(--color-dim);
+  transition:
+    transform var(--d-mid) var(--ease-out-expo),
+    background-color var(--d-fast) ease;
+}
+
+.toggle[data-on="true"] .toggleTrack {
+  border-color: var(--color-signal);
+}
+
+.toggle[data-on="true"] .toggleKnob {
+  transform: translateX(22px);
+  background: var(--color-signal);
+}
+
+.toggleLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.toggleHint {
+  font-size: var(--fs-sm);
+  color: var(--color-dim);
+}
+
+/* ---- stubs ---- */
+
+.stubs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.6vw, 22px);
+}
+
+.stub {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: clamp(18px, 2.4vw, 30px);
+  padding-left: clamp(26px, 3vw, 40px);
+  border: 1px solid var(--color-line);
+  background: var(--color-ink-raised);
+  transition:
+    border-color var(--d-mid) ease,
+    background-color var(--d-mid) ease,
+    transform var(--d-mid) var(--ease-out-expo);
+}
+
+.stub:hover {
+  border-color: var(--color-line-strong);
+  transform: translateY(-3px);
+}
+
+.stub[data-emphasis] {
+  border-color: rgba(100, 175, 219, 0.4);
+  background: linear-gradient(
+    to bottom,
+    rgba(100, 175, 219, 0.055),
+    rgba(10, 10, 11, 0) 46%
+  );
+}
+
+/* Perforation down the tear edge. */
+.perf {
+  position: absolute;
+  left: clamp(11px, 1.3vw, 16px);
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-line-strong) 0 3px,
+    transparent 3px 9px
+  );
+}
+
+.stubTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.stubNo {
+  color: var(--color-signal);
+}
+
+.stubSerial {
+  color: var(--color-dim);
+}
+
+.stubName {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  letter-spacing: -0.025em;
+  color: var(--color-bone);
+}
+
+.stubLine {
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  color: var(--color-silver);
+  text-wrap: pretty;
+}
+
+/* ---- price ---- */
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-line);
+  padding-top: 14px;
+  margin-top: 2px;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--color-bone);
+  font-variant-numeric: tabular-nums;
+}
+
+.currency {
+  font-size: 0.46em;
+  vertical-align: baseline;
+  margin-right: 0.08em;
+  color: var(--color-silver);
+  letter-spacing: 0;
+}
+
+.unit {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.total {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-height: 0;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height var(--d-mid) var(--ease-out-expo),
+    opacity var(--d-mid) ease;
+}
+
+.total[data-on="true"] {
+  max-height: 3rem;
+  opacity: 1;
+}
+
+.totalLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-signal);
+}
+
+.totalValue {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-bone);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- includes ---- */
+
+.includes {
+  display: grid;
+  gap: 4px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+}
+
+.includes li::before {
+  content: "— ";
+  color: var(--color-dim);
+}
+
+.stubNote {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--color-dim);
+  text-wrap: pretty;
+}
+
+.stubCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-line-strong);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+  transition:
+    background-color var(--d-fast) ease,
+    color var(--d-fast) ease,
+    border-color var(--d-fast) ease;
+}
+
+.stubCta:hover,
+.stubCta:focus-visible {
+  background: var(--color-bone);
+  border-color: var(--color-bone);
+  color: var(--color-ink);
+}
+
+.stamp {
+  position: absolute;
+  top: clamp(18px, 2.4vw, 30px);
+  right: 0;
+  transform: translateX(1px);
+  padding: 5px 10px;
+  background: var(--color-signal);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ---- add-on strip ---- */
+
+.addon {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(16px, 2.4vw, 40px);
+  align-items: start;
+  padding: clamp(18px, 2.4vw, 26px);
+  border: 1px solid var(--color-line);
+  border-left: 2px solid var(--color-dim);
+  transition: border-color var(--d-mid) ease;
+}
+
+.addon[data-on="true"] {
+  border-left-color: var(--color-signal);
+}
+
+.addonHead {
+  display: grid;
+  gap: 6px;
+}
+
+.addonNo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--color-signal);
+}
+
+.addonTitle {
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  letter-spacing: -0.025em;
+}
+
+.addonPrice {
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-bone);
+  font-variant-numeric: tabular-nums;
+}
+
+.addonUnit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  margin-left: 4px;
+}
+
+.addonList {
+  display: grid;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+}
+
+.addonList li::before {
+  content: "— ";
+  color: var(--color-dim);
+}
+
+.addonNote {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--color-dim);
+  align-self: center;
+}
+
+/* ---- small print ---- */
+
+.smallprint {
+  display: grid;
+  grid-template-columns: 16ch minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 48px);
+  border-top: 1px solid var(--color-line);
+  padding-top: 20px;
+}
+
+.smallprintList {
+  display: grid;
+  gap: 7px;
+  font-size: var(--fs-body);
+  color: var(--color-silver);
+  max-width: 68ch;
+}
+
+.smallprintList li::before {
+  content: "· ";
+  color: var(--color-signal);
+}
+
+/* ---- narrow ---- */
+
+@media (max-width: 1000px) {
+  .stubs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .addon {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .addonNote {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .head {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+}
+
+@media (max-width: 680px) {
+  .stubs {
+    grid-template-columns: 1fr;
+  }
+
+  .addon {
+    grid-template-columns: 1fr;
+  }
+
+  .smallprint {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

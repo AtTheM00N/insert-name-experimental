@@ -1,0 +1,114 @@
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--bar);
+  padding-inline: var(--pad);
+  background: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  user-select: none;
+  pointer-events: none;
+}
+
+.bar[data-side="top"] {
+  top: 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.bar[data-side="bottom"] {
+  bottom: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.barItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  white-space: nowrap;
+  overflow: hidden;
+  /* Safety net: if a slugline ever outgrows the bar it truncates on purpose
+     rather than being sheared off mid-glyph. */
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* The wordmark holds its width — the slate is the thing allowed to give. */
+.barItem[data-kind="mark"] {
+  flex: 0 0 auto;
+}
+
+.barItem[data-kind="slate"] {
+  flex: 1 1 auto;
+  justify-content: center;
+  text-align: center;
+  color: var(--color-silver);
+  letter-spacing: 0.16em;
+}
+
+.barItem[data-kind="slash"] {
+  color: var(--color-dim);
+}
+
+.bracket {
+  color: var(--color-signal);
+  font-family: var(--font-mark);
+}
+
+.mark {
+  color: var(--color-bone);
+}
+
+.signal {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  flex: 0 0 auto;
+}
+
+.signal[data-rec] {
+  background: var(--color-alert);
+  animation: rec 1.6s steps(1) infinite;
+}
+
+@media (max-width: 900px) {
+  .onlyWide {
+    display: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Both the wordmark and the slugline will not fit in 26px of bar at this
+     width, and the slugline is the more interesting of the two. The mark is
+     already carried by the bottom bar, so the top bar gives it up and hands
+     the whole width to the slate. */
+  .bar[data-side="top"] .barItem[data-kind="mark"] {
+    display: none;
+  }
+}
+
+@media (max-width: 460px) {
+  .bar {
+    letter-spacing: 0.07em;
+    gap: 8px;
+  }
+}
+
+/* At 320px the longest slugline needs every pixel in the bar. It gets them,
+   and the ellipsis above stays as the last resort. */
+@media (max-width: 400px) {
+  .bar {
+    padding-inline: 12px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+}

@@ -1,0 +1,103 @@
+.reticle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 400;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms linear;
+  mix-blend-mode: difference;
+}
+
+.reticle[data-visible="true"] {
+  opacity: 1;
+}
+
+/* Corner ticks — a focus box, not a blob. */
+.tick {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--color-bone);
+  transition:
+    width 200ms var(--ease-out-expo),
+    height 200ms var(--ease-out-expo),
+    border-color 200ms linear;
+}
+
+.tick[data-c="tl"] {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+.tick[data-c="tr"] {
+  top: 0;
+  right: 0;
+  border-width: 1px 1px 0 0;
+}
+.tick[data-c="bl"] {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1px 1px;
+}
+.tick[data-c="br"] {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1px 1px 0;
+}
+
+.reticle[data-mode="lock"] .tick,
+.reticle[data-mode="drag"] .tick {
+  width: 11px;
+  height: 11px;
+}
+
+.reticle[data-down="true"] .tick {
+  width: 4px;
+  height: 4px;
+}
+
+/* A dot in the middle when nothing is under the pointer. */
+.reticle[data-mode="idle"]::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 3px;
+  height: 3px;
+  background: var(--color-bone);
+  transform: translate(-50%, -50%);
+}
+
+.reticle[data-mode="text"]::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1px;
+  height: 20px;
+  background: var(--color-bone);
+  transform: translate(-50%, -50%);
+}
+
+.reticle[data-mode="drag"]::before {
+  content: "↔";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-bone);
+}
+
+.label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  margin-top: 4px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+}
