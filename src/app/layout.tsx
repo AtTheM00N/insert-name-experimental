@@ -69,6 +69,9 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   applicationName: STUDIO.placeholder,
   generator: "Next.js",
+  icons: {
+    icon: "/favicon.ico"
+  },
   keywords: [
     "cinematic website design",
     "custom website development",
